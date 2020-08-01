@@ -379,12 +379,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home: //햄버거 버튼
                 if (!is_Panel_Expanded) {
                     is_Panel_Expanded = true;
                     MainPanel.animate()
                             .x(PanelWidth)
-                            .setDuration(800)
+                            .setDuration(1)
                             .start();
 
                     androidx.coordinatorlayout.widget.CoordinatorLayout ViewGroup =
@@ -398,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
                         public boolean onTouch(View view, MotionEvent motionEvent) {
                             MainPanel.animate()
                                     .x(0)
-                                    .setDuration(800)
+                                    .setDuration(1)
                                     .start();
                             is_Panel_Expanded = false;
 
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     MainPanel.animate()
                             .x(0)
-                            .setDuration(800)
+                            .setDuration(1)
                             .start();
                 }
                 return true;
