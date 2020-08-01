@@ -311,6 +311,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static void ViewGroup_Enable_Toggle2(ViewGroup viewGroup, boolean Enable) {
+        int ChildActivity_Count = viewGroup.getChildCount();
+        for (int i = 0; i < ChildActivity_Count; i++) {
+            View view = viewGroup.getChildAt(i);
+
+            if (view.getId() != android.R.id.home) { //R.id.btn_Menu
+                view.setEnabled(Enable);
+                if (view instanceof ViewGroup) {
+                    ViewGroup_Enable_Toggle((ViewGroup) view, Enable);
+                }
+            }
+        }
+    }
+
 
     public void onObtainingPermissionOverlayWindow() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
@@ -384,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
                     is_Panel_Expanded = true;
                     MainPanel.animate()
                             .x(PanelWidth)
-                            .setDuration(1)
+                            .setDuration(300)
                             .start();
 
                     androidx.coordinatorlayout.widget.CoordinatorLayout ViewGroup =
@@ -398,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
                         public boolean onTouch(View view, MotionEvent motionEvent) {
                             MainPanel.animate()
                                     .x(0)
-                                    .setDuration(1)
+                                    .setDuration(300)
                                     .start();
                             is_Panel_Expanded = false;
 
@@ -415,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     MainPanel.animate()
                             .x(0)
-                            .setDuration(1)
+                            .setDuration(300)
                             .start();
                 }
                 return true;
