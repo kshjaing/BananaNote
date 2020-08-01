@@ -16,7 +16,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="Galaxy_S10e_API_29" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -99,18 +98,18 @@
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\OneDrive\Git_Banana_Note\BananaNote_KTH\app\src\main\res\drawable" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.banananote" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\OneDrive\Git_Banana_Note\BananaNote\app\src\main\res\menu" />
       <recent name="E:\OneDrive\Git_Banana_Note\BananaNote_KTH\app\src\main\res\drawable" />
       <recent name="E:\OneDrive\Git_Banana_Note\BananaNote_KTH\app\src\main\res\values" />
       <recent name="E:\OneDrive\Git_Banana_Note\BananaNote_KTH\app\src\main\res" />
       <recent name="E:\OneDrive\Git_Banana_Note\BananaNote_KTH\app\src\main\res\layout" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.example.banananote" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\OneDrive\Git_Banana_Note\BananaNote_KTH\app\src\main\res\drawable" />
     </key>
   </component>
   <component name="RunManager">
