@@ -480,4 +480,10 @@ public class MainActivity extends AppCompatActivity {
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
     }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+    }
 }
