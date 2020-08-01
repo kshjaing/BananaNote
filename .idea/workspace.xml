@@ -86,6 +86,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Galaxy_S10e_API_29" />
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-07-29T15:07:06.702Z" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
