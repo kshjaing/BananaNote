@@ -71,10 +71,8 @@ public class MainActivity extends AppCompatActivity {
     //private TabLayout tabLayout;
 
     //activity_bottom_menu.xml
-    LinearLayout Linear_ALL;
-    LinearLayout Linear_Favorites;
-    LinearLayout Linear_Tag;
-    LinearLayout Linear_Lock;
+    //fab
+    Button fab;
 
     //pager position value
     int Position;
@@ -157,8 +155,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
 
-        //FloatingActionButton fab (Add Memo)
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,12 +185,6 @@ public class MainActivity extends AppCompatActivity {
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
-
-
-        Linear_ALL = findViewById(R.id.Linear_ALL);
-        Linear_Favorites = findViewById(R.id.Linear_Favorites);
-        Linear_Tag = findViewById(R.id.Linear_Tag);
-        Linear_Lock = findViewById(R.id.Linear_Lock);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -252,12 +243,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-        Linear_ALL.setOnClickListener(onClickListener);
-        Linear_Favorites.setOnClickListener(onClickListener);
-        Linear_Tag.setOnClickListener(onClickListener);
-        Linear_Lock.setOnClickListener(onClickListener);
-
 
         Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
 
@@ -463,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
 
-        Linear_ALL.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fragment_main.selectedClick();

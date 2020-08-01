@@ -85,37 +85,12 @@
 
                 </androidx.viewpager.widget.ViewPager>
 
-                <com.google.android.material.bottomappbar.BottomAppBar
-                    android:id="@+id/bottom_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:backgroundTint="@color/BottomNavigationBar"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    app:fabAlignmentMode="center"
-                    app:fabCradleRoundedCornerRadius="20dp"
-                    app:fabCradleVerticalOffset="0dp"
-                    app:hideOnScroll="true"
-                    app:fabCradleMargin="5dp">
-
-
-                    <include
-                        android:id="@+id/ic_bottom_menu"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        layout="@layout/activity_bottom_menu"/>
-
-                </com.google.android.material.bottomappbar.BottomAppBar>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <Button
                     android:id="@+id/fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:fabSize="normal"
-                    app:layout_anchor="@id/bottom_bar"
-                    android:tint="@color/white"
-                    android:src="@drawable/ic_vector_add_64px"/>
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@drawable/button_plus"/>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
