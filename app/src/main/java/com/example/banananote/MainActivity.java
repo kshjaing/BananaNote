@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
     //private TabLayout tabLayout;
 
     //activity_bottom_menu.xml
-    //fab
-    Button fab;
+
+    Button btnPlus;                           //새 메모 버튼
 
     //pager position value
     int Position;
@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
 
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        btnPlus = findViewById(R.id.btnPlus);
+        btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
@@ -162,15 +162,17 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        //페이저 기능
+        //------------------페이저 기능--------------------
         pager = findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(2); //메인, 폴더
+        pager.setOffscreenPageLimit(2); //페이지 크기 2개
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
 
+        //메인페이지
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
+        //폴더페이지
         Fragment_Folder fragment_folder = new Fragment_Folder();
         adapter.addItem(fragment_folder);
 
@@ -193,15 +195,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         Position = position;
-                        toolBarLayout.setTitle("Favorites");
-                        break;
-                    case 2:
-                        Position = position;
-                        toolBarLayout.setTitle("Tag");
-                        break;
-                    case 3:
-                        Position = position;
-                        toolBarLayout.setTitle("Lock");
+                        toolBarLayout.setTitle("Folder");
                         break;
                 }
             }
@@ -212,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+/* 하단바 사라졌으니 이 주석부분은 없애야할듯
 
         OnClickListener onClickListener = new OnClickListener() {
             @Override
@@ -233,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
-        };
+        };*/
 
         Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
 
@@ -419,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fragment_main.selectedClick();
