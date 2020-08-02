@@ -297,20 +297,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void ViewGroup_Enable_Toggle2(ViewGroup viewGroup, boolean Enable) {
-        int ChildActivity_Count = viewGroup.getChildCount();
-        for (int i = 0; i < ChildActivity_Count; i++) {
-            View view = viewGroup.getChildAt(i);
-
-            if (view.getId() != android.R.id.home) { //R.id.btn_Menu
-                view.setEnabled(Enable);
-                if (view instanceof ViewGroup) {
-                    ViewGroup_Enable_Toggle((ViewGroup) view, Enable);
-                }
-            }
-        }
-    }
-
 
     public void onObtainingPermissionOverlayWindow() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
