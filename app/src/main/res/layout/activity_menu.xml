@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/DarkMode"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <Switch
         android:id="@+id/switch_Permission"
@@ -23,49 +23,74 @@
     <Button
         android:id="@+id/Btn_DarkMode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/DarkMode" />
+        android:layout_height="75dp"
+        android:fontFamily="@font/ridibatang"
+        android:paddingLeft="40dp"
+        android:text="@string/DarkMode"
+        android:textAlignment="viewStart"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:id="@+id/Btn_Settings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Settings" />
+        android:layout_height="75dp"
+        android:fontFamily="@font/ridibatang"
+        android:paddingStart="40dp"
+        android:text="@string/Settings"
+        android:textAlignment="viewStart"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/Btn_Recycle_bin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Recycle_bin" />
+        android:layout_height="75dp"
+        android:fontFamily="@font/ridibatang"
+        android:paddingStart="40dp"
+        android:text="@string/Recycle_bin"
+        android:textAlignment="viewStart"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/Btn_Enquire"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Enquire" />
+        android:layout_height="75dp"
+        android:fontFamily="@font/ridibatang"
+        android:paddingStart="40dp"
+        android:text="@string/Enquire"
+        android:textAlignment="viewStart"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
         android:layout_gravity="center"
-        android:textSize="30sp"
-        android:text="Banana note" />
+        android:layout_marginTop="190dp"
+        android:fontFamily="@font/ridibatang"
+        android:text="바나나노트"
+        android:textColor="#000000"
+        android:textSize="28sp" />
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:textSize="20sp"
-        android:text="Developed By 김태훈" />
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/ridibatang"
+        android:text="Developed By 김태훈, 김성훈"
+        android:textColor="#333333"
+        android:textSize="12sp" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:textSize="20sp"
-        android:text="Ver 1.0" />
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/ridibatang"
+        android:text="Ver 1.0"
+        android:textColor="#424242"
+        android:textSize="12sp" />
 </LinearLayout>

@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     ///
     public static Context context_main;
     public static Boolean Edit_Activation;
+    public static Boolean isDarkmode;         //다크모드 인수
 
     String a;
     public static String tag;
