@@ -72,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
     //activity_bottom_menu.xml
     //fab
-    Button fab;
+    public Button fab;
+    //scrollTop
+    public Button scrollTop;
 
     //pager position value
     int Position;
@@ -162,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
             }
         });
+
+        scrollTop = findViewById(R.id.scrollTop);
 
 
 

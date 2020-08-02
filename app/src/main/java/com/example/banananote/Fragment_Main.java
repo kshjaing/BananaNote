@@ -4,8 +4,11 @@ import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -24,18 +28,9 @@ public class Fragment_Main extends Fragment {
 
     RecyclerView recyclerView;
     NoteAdapter adapter;
-    Note_MultiSelectionAdapter multi_adapter;
 
-
-
-    static boolean checked= false;
-
-    //public  String[] title;
-
-    public  int i = 0;
-    //어댑터 사이즈
-
-    int adapter_size = 0;
+    Button fab;
+    Button scrollTop;
 
     String Arr_settitle[] = {
             "test1","test2","test3",
@@ -66,8 +61,6 @@ public class Fragment_Main extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
-
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
 
@@ -91,8 +84,39 @@ public class Fragment_Main extends Fragment {
             }
         });
 
+        //메모추가 버튼 (스크롤 내리면 사라짐, 올릴때 보여짐)
+        fab = ((MainActivity)MainActivity.context_main).fab;
 
-        
+        NestedScrollView nestedScrollView = (NestedScrollView) v.findViewById(R.id.Nested_ScrollView);
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                if(scrollY < oldScrollY) {
+                    //Up
+                    fab.setVisibility(View.VISIBLE);
+                } else if (scrollY > oldScrollY) {
+                    //Down
+                    fab.setVisibility(View.INVISIBLE);
+                    scrollTop.setVisibility(View.VISIBLE);
+                }
+
+                if (scrollY == 0) {
+                    //Top
+                    scrollTop.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        scrollTop = ((MainActivity)MainActivity.context_main).scrollTop;
+        scrollTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nestedScrollView.smoothScrollTo(0,0);
+
+                scrollTop.setVisibility(View.GONE);
+            }
+        });
         return v;
     }
 

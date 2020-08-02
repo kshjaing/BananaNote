@@ -86,6 +86,16 @@
                 </androidx.viewpager.widget.ViewPager>
 
                 <Button
+                    android:id="@+id/scrollTop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Top"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    />
+
+                <Button
                     android:id="@+id/fab"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
