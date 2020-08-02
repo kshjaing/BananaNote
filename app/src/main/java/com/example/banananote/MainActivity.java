@@ -3,7 +3,6 @@ package com.example.banananote;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -34,11 +33,8 @@ import android.widget.Toast;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -168,21 +164,15 @@ public class MainActivity extends AppCompatActivity {
 
         //페이저 기능
         pager = findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(4); //main,favorites,tag,lock
+        pager.setOffscreenPageLimit(2); //메인, 폴더
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
 
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Favorites fragment_favorites = new Fragment_Favorites();
-        adapter.addItem(fragment_favorites);
-
-        Fragment_Tag fragment_tag = new Fragment_Tag();
-        adapter.addItem(fragment_tag);
-
-        Fragment_Lock fragment_lock = new Fragment_Lock();
-        adapter.addItem(fragment_lock);
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
@@ -423,14 +413,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Favorites fragment_favorites = new Fragment_Favorites();
-        adapter.addItem(fragment_favorites);
-
-        Fragment_Tag fragment_tag = new Fragment_Tag();
-        adapter.addItem(fragment_tag);
-
-        Fragment_Lock fragment_lock = new Fragment_Lock();
-        adapter.addItem(fragment_lock);
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
@@ -454,14 +438,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Favorites fragment_favorites = new Fragment_Favorites();
-        adapter.addItem(fragment_favorites);
-
-        Fragment_Tag fragment_tag = new Fragment_Tag();
-        adapter.addItem(fragment_tag);
-
-        Fragment_Lock fragment_lock = new Fragment_Lock();
-        adapter.addItem(fragment_lock);
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
