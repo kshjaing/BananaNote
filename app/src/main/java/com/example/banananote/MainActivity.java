@@ -10,6 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     Intent foregroundServiceIntent;
     private static final int MESSAGE_PERMISSION_GRANTED = 1111;
     private static final int MESSAGE_PERMISSION_DENIED = 1112;
+
+    public static SQLiteDatabase db = null;
+    public static DBHelper dbHelper;
 
     //menu 부분
     private DisplayMetrics metrics;
@@ -90,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ibtnSearch = findViewById(R.id.ibtnSearch);
+
+        dbHelper = new DBHelper(this, 4);
+        db = dbHelper.getWritableDatabase();
 
         //tag = "multi";
         tag = "single";
