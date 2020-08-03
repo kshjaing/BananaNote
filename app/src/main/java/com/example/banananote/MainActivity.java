@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         pager.setOffscreenPageLimit(2); //페이지 크기 2개
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
+        adapter.notifyDataSetChanged();  //데이터 변화 시 바로 변경해서 보여주는 역할(새로고침)
 
         //메인페이지
         Fragment_Main fragment_main = new Fragment_Main();
