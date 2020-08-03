@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.view.View.OnClickListener; //클릭 이벤트
 import android.widget.SearchView;
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     //activity_bottom_menu.xml
 
     Button btnPlus;                           //새 메모 버튼
+    ImageButton ibtnSearch;                    //검색버튼(actionbar.xml)
 
     //pager position value
     int Position;
@@ -86,12 +89,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ibtnSearch = findViewById(R.id.ibtnSearch);
+
         //tag = "multi";
         tag = "single";
         ///
         context_main = MainActivity.this;
         Edit_Activation = false; //기본값 비활성화
 
+
+        //전역 폰트로 지정할 typeface 생성
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "font/ridibatang.otf");
 
         Btn_Permission = findViewById(R.id.switch_Permission);
 
@@ -146,7 +154,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle("ALL");
+        toolBarLayout.setTitle("전체");
+        toolBarLayout.setExpandedTitleTypeface(typeface);
         getWindow().setStatusBarColor(Color.parseColor("#fff9eb"));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -173,8 +182,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.addItem(fragment_main);
 
         //폴더페이지
-        Fragment_Folder fragment_folder = new Fragment_Folder();
-        adapter.addItem(fragment_folder);
+        Fragment_Todo fragment_todo = new Fragment_Todo();
+        adapter.addItem(fragment_todo);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
@@ -191,11 +200,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         Position = position;
-                        toolBarLayout.setTitle("ALL");
+                        toolBarLayout.setTitle("전체");
                         break;
                     case 1:
                         Position = position;
-                        toolBarLayout.setTitle("Folder");
+                        toolBarLayout.setTitle("할일");
                         break;
                 }
             }
@@ -205,29 +214,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-/* 하단바 사라졌으니 이 주석부분은 없애야할듯
-
-        OnClickListener onClickListener = new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                switch (view.getId()) {
-                    case R.id.Linear_ALL:
-                        pager.setCurrentItem(0, false);
-                        break;
-                    case R.id.Linear_Favorites:
-                        pager.setCurrentItem(1,false);
-                        break;
-                    case R.id.Linear_Tag:
-                        pager.setCurrentItem(2, false);
-                        break;
-                    case R.id.Linear_Lock:
-                        pager.setCurrentItem(3, false);
-                        break;
-                }
-            }
-        };*/
 
         Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
 
@@ -407,8 +393,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Folder fragment_folder = new Fragment_Folder();
-        adapter.addItem(fragment_folder);
+        Fragment_Todo fragment_todo = new Fragment_Todo();
+        adapter.addItem(fragment_todo);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
@@ -432,8 +418,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Folder fragment_folder = new Fragment_Folder();
-        adapter.addItem(fragment_folder);
+        Fragment_Todo fragment_todo = new Fragment_Todo();
+        adapter.addItem(fragment_todo);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
