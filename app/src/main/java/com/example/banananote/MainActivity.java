@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     //하단 탭
     //private TabLayout tabLayout;
 
-    //activity_bottom_menu.xml
 
     Button btnPlus;                           //새 메모 버튼
     ImageButton ibtnSearch;                    //검색버튼(actionbar.xml)
@@ -157,17 +156,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle("전체");
-        toolBarLayout.setExpandedTitleTypeface(typeface);
-        getWindow().setStatusBarColor(Color.parseColor("#fff9eb"));
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
-
         btnPlus = findViewById(R.id.btnPlus);
         btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,33 +183,6 @@ public class MainActivity extends AppCompatActivity {
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
-
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                switch (position) {
-                    case 0:
-                        Position = position;
-                        toolBarLayout.setTitle("전체");
-                        break;
-                    case 1:
-                        Position = position;
-                        toolBarLayout.setTitle("할일");
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
 
