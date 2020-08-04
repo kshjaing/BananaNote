@@ -209,8 +209,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
                     valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            layoutParams.setMargins((Integer) valueAnimator.getAnimatedValue(),
-                                    (Integer) valueAnimator.getAnimatedValue(),
+                            layoutParams.setMargins(0,
+                                    0,
                                     (Integer) valueAnimator.getAnimatedValue(),
                                     (Integer) valueAnimator.getAnimatedValue());
                             Main_CardView.requestLayout();

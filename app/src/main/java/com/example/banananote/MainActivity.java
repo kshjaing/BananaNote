@@ -3,10 +3,10 @@ package com.example.banananote;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
@@ -22,11 +22,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.view.View.OnClickListener; //클릭 이벤트
 import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -34,11 +32,8 @@ import android.widget.Toast;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
     //private TabLayout tabLayout;
 
     //activity_bottom_menu.xml
-    //fab
-    public Button fab;
+    //btnPlus
+    public Button btnPlus;
     //scrollTop
     public Button scrollTop;
 
@@ -83,8 +78,10 @@ public class MainActivity extends AppCompatActivity {
     public static Context context_main;
     public static Boolean Edit_Activation;
 
-    String a;
     public static String tag;
+
+    //Memo 추가액티비티 - > 메모 보기 액티비티
+    public static int save = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,35 +154,31 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
 
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        btnPlus = findViewById(R.id.btnPlus);
+        btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), NoteAddActivity.class);
+                save = 1;
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
             }
         });
 
         scrollTop = findViewById(R.id.scrollTop);
 
-
-
-        //페이저 기능
+        //pager
         pager = findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(4); //main,favorites,tag,lock
+        pager.setOffscreenPageLimit(2);
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
 
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Favorites fragment_favorites = new Fragment_Favorites();
-        adapter.addItem(fragment_favorites);
-
-        Fragment_Tag fragment_tag = new Fragment_Tag();
-        adapter.addItem(fragment_tag);
-
-        Fragment_Lock fragment_lock = new Fragment_Lock();
-        adapter.addItem(fragment_lock);
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
@@ -206,15 +199,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         Position = position;
-                        toolBarLayout.setTitle("Favorites");
-                        break;
-                    case 2:
-                        Position = position;
-                        toolBarLayout.setTitle("Tag");
-                        break;
-                    case 3:
-                        Position = position;
-                        toolBarLayout.setTitle("Lock");
+                        toolBarLayout.setTitle("Folder");
                         break;
                 }
             }
@@ -226,30 +211,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-        OnClickListener onClickListener = new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                switch (view.getId()) {
-                    case R.id.Linear_ALL:
-                        pager.setCurrentItem(0, false);
-                        break;
-                    case R.id.Linear_Favorites:
-                        pager.setCurrentItem(1,false);
-                        break;
-                    case R.id.Linear_Tag:
-                        pager.setCurrentItem(2, false);
-                        break;
-                    case R.id.Linear_Lock:
-                        pager.setCurrentItem(3, false);
-                        break;
-                }
-            }
-        };
-
         Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
-
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -265,15 +227,6 @@ public class MainActivity extends AppCompatActivity {
         MenuPanelParameters.width = PanelWidth;
 
         MenuPanel.setLayoutParams(MenuPanelParameters);
-
-
-        View main_cardview;
-        main_cardview = getLayoutInflater().inflate(R.layout.frag_main_item, null,false);
-
-        CheckBox main_checkBox;
-        main_checkBox = main_cardview.findViewById(R.id.main_checkbox);
-
-        main_checkBox.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -284,7 +237,6 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onStop();
     }
-
 
     public static void ViewGroup_Enable_Toggle(ViewGroup viewGroup, boolean Enable) {
         int ChildActivity_Count = viewGroup.getChildCount();
@@ -299,21 +251,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    public static void ViewGroup_Enable_Toggle2(ViewGroup viewGroup, boolean Enable) {
-        int ChildActivity_Count = viewGroup.getChildCount();
-        for (int i = 0; i < ChildActivity_Count; i++) {
-            View view = viewGroup.getChildAt(i);
-
-            if (view.getId() != android.R.id.home) { //R.id.btn_Menu
-                view.setEnabled(Enable);
-                if (view instanceof ViewGroup) {
-                    ViewGroup_Enable_Toggle((ViewGroup) view, Enable);
-                }
-            }
-        }
-    }
-
 
     public void onObtainingPermissionOverlayWindow() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
@@ -377,12 +314,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //ActionBar menu Selected
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //햄버거 버튼
+            case android.R.id.home:
                 if (!is_Panel_Expanded) {
                     is_Panel_Expanded = true;
                     MainPanel.animate()
@@ -430,63 +365,74 @@ public class MainActivity extends AppCompatActivity {
 
     protected void restart() {
 
-
         Edit_Activation = true;
 
         //페이저 기능
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
+        adapter.notifyDataSetChanged();
 
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Favorites fragment_favorites = new Fragment_Favorites();
-        adapter.addItem(fragment_favorites);
 
-        Fragment_Tag fragment_tag = new Fragment_Tag();
-        adapter.addItem(fragment_tag);
-
-        Fragment_Lock fragment_lock = new Fragment_Lock();
-        adapter.addItem(fragment_lock);
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fragment_main.selectedClick();
             }
         });
-
     }
 
     @Override
     public void onBackPressed() {
-        Edit_Activation = false;
+        if(!Edit_Activation) {
+            super.onBackPressed();
+        } else {
+            //((MainActivity)MainActivity.context_main).restart();
+            //onRestart();
+            Edit_Activation = false;
+            onRestart();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //Toast.makeText(context_main, "test", Toast.LENGTH_SHORT).show();
         //페이저 기능
+
+        tag = "single";
+        scrollTop.setVisibility(View.GONE);
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
 
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Favorites fragment_favorites = new Fragment_Favorites();
-        adapter.addItem(fragment_favorites);
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
 
-        Fragment_Tag fragment_tag = new Fragment_Tag();
-        adapter.addItem(fragment_tag);
-
-        Fragment_Lock fragment_lock = new Fragment_Lock();
-        adapter.addItem(fragment_lock);
+        adapter.notifyDataSetChanged();
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
-    }
 
-    @Override
-    public void onResume() {
-
-        super.onResume();
+        btnPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), NoteAddActivity.class);
+                save = 1;
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
     }
 }
