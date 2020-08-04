@@ -1,11 +1,18 @@
 package com.example.banananote;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,10 +20,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,52 +34,33 @@ public class Fragment_Main extends Fragment {
 
     RecyclerView recyclerView;
     NoteAdapter adapter;
-    Note_MultiSelectionAdapter multi_adapter;
+    Button btnPlus;
+    Button scrollTop;
 
+    ///
+    public static Fragment_Main context_Frag_Main;
+    public String Title;
+    public String CreateDate;
+    public String Memo;
 
-
-    static boolean checked= false;
-
-    //public  String[] title;
-
-    public  int i = 0;
-    //어댑터 사이즈
-
-    int adapter_size = 0;
-
-    String Arr_settitle[] = {
-            "test1","test2","test3",
-            "test4","test5","test6",
-            "test7","test8","test9",
-            "test10","test11","test12",
-            "test13","test14","test15",
-            "test16","test17","test18"
-    };
-    String Arr_setCreateDate[] = {
-            "2020-07-21","2020-07-22","2020-07-23",
-            "2020-07-24","2020-07-25","2020-07-26",
-            "2020-07-27","2020-07-28","2020-07-29",
-            "2020-07-30","2020-07-31","2020-07-32",
-            "2020-07-33","2020-07-34","2020-07-35",
-            "2020-07-36","2020-07-37","2020-07-38"
-    };
-    String Arr_setMemo[] = {
-            "테스트 입니다1","테스트입니다2","테스트입니다3",
-            "테스트 입니다4","테스트입니다5","테스트입니다6",
-            "테스트 입니다7","테스트입니다8","테스트입니다9",
-            "테스트 입니다10","테스트입니다11","테스트입니다12",
-            "테스트 입니다13","테스트입니다14","테스트입니다15",
-            "테스트 입니다16","테스트입니다17","테스트입니다18"
-    };
+    ///
+    public static String[] Arr_ID = {};
+    public static String[] Arr_TITLE = {};
+    public static String[] Arr_CREATE_DATE = {};
+    public static String[] Arr_CONTENTS_MEMO = {};
+    public static String[] Arr_isFAVORITE = {};
+    public static String[] Arr_WHICH_FOLDER = {};
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
+        context_Frag_Main = Fragment_Main.this;
 
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+
+        QUERY_NOTE();
 
         List<Note> list = getList();
 
@@ -80,30 +71,114 @@ public class Fragment_Main extends Fragment {
 
         adapter = new NoteAdapter(this,list);
 
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new OnNoteItemClickListener() {
             @Override
             public void onItemClick(NoteAdapter.ViewHolder holder, View view, int position) {
                 Note item = adapter.getItem(position);
-                Toast.makeText(getContext(), "아이템 선택됨: " + item.getTitle(), Toast.LENGTH_LONG).show();
-
+                Title = item.getTitle();
+                CreateDate = item.getCreateDate();
+                Memo = item.getMemo();
+                //Toast.makeText(getContext(), "아이템 선택됨: " + item.getTitle(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(),NoteShowActivity.class);
+                startActivity(intent);
             }
         });
 
+        //메모추가 버튼 (스크롤 내리면 사라짐, 올릴때 보여짐)
+        btnPlus = ((MainActivity)MainActivity.context_main).btnPlus;
 
-        
+        NestedScrollView nestedScrollView = (NestedScrollView) v.findViewById(R.id.Nested_ScrollView);
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                if(scrollY < oldScrollY) {
+                    //Up
+                    btnPlus.setVisibility(View.VISIBLE);
+                } else if (scrollY > oldScrollY) {
+                    //Down
+                    btnPlus.setVisibility(View.INVISIBLE);
+                    scrollTop.setVisibility(View.VISIBLE);
+                }
+
+                if (scrollY == 0) {
+                    //Top
+                    scrollTop.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        scrollTop = ((MainActivity)MainActivity.context_main).scrollTop;
+        scrollTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nestedScrollView.smoothScrollTo(0,0);
+
+                scrollTop.setVisibility(View.GONE);
+            }
+        });
         return v;
     }
 
-    private List<Note> getList() {
+    public void QUERY_NOTE() {
+        int i = 0;
+
+        try {
+            String uriString = "content://com.example.banananote/Note";
+            Uri uri = new Uri.Builder().build().parse(uriString);
+
+            String[] columns = new String[] {"id","title","createDate","contentsMemo","isFavorite","whichFolder"};
+            Cursor cursor = getContext().getContentResolver().query(uri, columns, null, null, "id ASC");
+            Log.e("Fragment_Main.java","QUERY 결과 : " + cursor.getCount());
+            int columns_count = cursor.getCount();
+
+            int index = 1;
+            Arr_ID = new String[columns_count];
+            Arr_TITLE = new String[columns_count];
+            Arr_CREATE_DATE = new String[columns_count];
+            Arr_CONTENTS_MEMO = new String[columns_count];
+            Arr_isFAVORITE = new String[columns_count];
+            Arr_WHICH_FOLDER = new String[columns_count];
+
+            while (cursor.moveToNext()) { //출력
+                String id = cursor.getString(cursor.getColumnIndex(columns[0]));
+                String title = cursor.getString(cursor.getColumnIndex(columns[1]));
+                String createDate = cursor.getString(cursor.getColumnIndex(columns[2]));
+                String contentsMemo = cursor.getString(cursor.getColumnIndex(columns[3]));
+                String isFavorite = cursor.getString(cursor.getColumnIndex(columns[4]));
+                String which_folder = cursor.getString(cursor.getColumnIndex(columns[5]));
+
+                Arr_ID[i] = id;
+                Arr_TITLE[i] = title;
+
+                createDate = createDate.substring(0,11);
+                Arr_CREATE_DATE[i] = createDate;
+
+                Arr_CONTENTS_MEMO[i] = contentsMemo;
+                Arr_isFAVORITE[i] = isFavorite;
+                Arr_WHICH_FOLDER[i] = which_folder;
+
+                Log.e("Fragment_Main.java", "레코드 " + index + " : " + id + ", " + title + ", " + createDate + ", " +
+                        contentsMemo + ", " + isFavorite + ", " + which_folder );
+                index += 1;
+                i+=1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Note> getList() {
         List<Note> list = new ArrayList<>();
 
-        for(int i = 0; i< Arr_settitle.length; i++) {
+        for(int i = 0; i< Arr_TITLE.length; i++) {
             Note model = new Note();
-            model.setTitle(Arr_settitle[i]);
-            model.setCreateDate(Arr_setCreateDate[i]);
-            model.setMemo(Arr_setMemo[i]);
+            model.setTitle(Arr_TITLE[i]);
+            model.setCreateDate(Arr_CREATE_DATE[i]);
+            model.setMemo(Arr_CONTENTS_MEMO[i]);
             list.add(model);
         }
 

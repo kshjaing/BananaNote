@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <permission android:name="com.example.banananote.READ_DATABASE"
+        android:protectionLevel="normal"/>
+    <permission android:name="com.example.banananote.WRITE_DATABASE"
+        android:protectionLevel="normal"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,6 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".NoteShowActivity"></activity>
+
+        <provider
+            android:name=".Provider"
+            android:authorities="com.example.banananote"
+            android:exported="true"
+            android:readPermission=".Provider.READ_DATABASE"
+            android:writePermission=".Provider.WRITE_DATABASE" />
 
         <receiver
             android:name=".AlarmReceiver"
@@ -22,6 +35,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -33,6 +47,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -48,7 +63,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".NoteAddActivity" />
+        <activity
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
