@@ -14,13 +14,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE Memo (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "title TEXT, contentsMemo TEXT, createDate TEXT, isFavorite INT," +
-                "whichFolder TEXT);");
-        db.execSQL("CREATE TABLE Folder (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "folderName TEXT);");
-        db.execSQL("CREATE TABLE Todo (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "contentsTodo TEXT, isComplete INT);");
+        db.execSQL("CREATE TABLE Memo (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "TITLE TEXT, CONTENTS_MEMO TEXT, CREATE_DATE TEXT, is_FAVORITE INT," +
+                "WHICH_FOLDER TEXT);");
+        db.execSQL("CREATE TABLE Folder (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "FOLDER_NAME TEXT);");
+        db.execSQL("CREATE TABLE Todo (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "CONTENTS_TODO TEXT, is_COMPLETE INT);");
     }
 
     @Override
