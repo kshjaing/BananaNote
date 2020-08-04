@@ -17,8 +17,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE Memo (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "TITLE TEXT, CONTENTS_MEMO TEXT, CREATE_DATE TEXT, is_FAVORITE INT," +
                 "WHICH_FOLDER TEXT);");
+
         db.execSQL("CREATE TABLE Folder (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "FOLDER_NAME TEXT);");
+
         db.execSQL("CREATE TABLE Todo (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "CONTENTS_TODO TEXT, is_COMPLETE INT);");
     }
