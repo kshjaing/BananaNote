@@ -37,9 +37,9 @@ import java.util.List;
 public class Fragment_Main extends Fragment {
 
     RecyclerView recyclerView;
-    NoteAdapter adapter;
-    Button btnPlus;
-    Button scrollTop;
+    NoteAdapter adapter; //frag_main_item.xml 모양을 어떤 규칙으로 뿌릴지 설정
+    Button btnPlus; //메모 추가
+    Button scrollTop; //스크롤 맨 위로
 
     ///
     public static Fragment_Main context_Frag_Main;
@@ -47,29 +47,38 @@ public class Fragment_Main extends Fragment {
     public String CreateDate;
     public String Memo;
 
-    ///
+    /// DB에서 받은 값 배열로 저장
     public static String[] Arr_ID = {};
     public static String[] Arr_TITLE = {};
     public static String[] Arr_CREATE_DATE = {};
     public static String[] Arr_CONTENTS_MEMO = {};
     public static String[] Arr_isFAVORITE = {};
     public static String[] Arr_WHICH_FOLDER = {};
+
+    //스크롤 모션 이벤트 관련
+    //모션 상황에 따라 true false
     boolean scrollStop;
+
     @Nullable
     @Override
     @SuppressLint("ClickableViewAccessibility")
+    //MainActivity.java 에서 OnCreate 비슷함
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         context_Frag_Main = Fragment_Main.this;
 
+        //프래그먼트 매인의 xml 객체
         View v = inflater.inflate(R.layout.fragment_main, container, false);
+
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
 
+        //DB 에서 SELECT 문
         QUERY_NOTE();
 
+        //getList() 메서드에서 Note.java 에 전달
         List<Note> list = getList();
 
-
+        //2열로 뿌리기
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,1);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setNestedScrollingEnabled(false);
@@ -77,17 +86,20 @@ public class Fragment_Main extends Fragment {
         //MainActivity.tag = "multi";
 
         adapter = new NoteAdapter(this,list);
-
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new OnNoteItemClickListener() {
+            //메모 클릭하면 OnNoteItemClickListener 에서 받아옴
             @Override
             public void onItemClick(NoteAdapter.ViewHolder holder, View view, int position) {
-                Note item = adapter.getItem(position);
+                Note item = adapter.getItem(position); //현제 위치 값
+
+                //NoteShowActivity.java 에서 이 값을 뿌려야함.
                 Title = item.getTitle();
                 CreateDate = item.getCreateDate();
                 Memo = item.getMemo();
+
                 //Toast.makeText(getContext(), "아이템 선택됨: " + item.getTitle(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getContext(),NoteShowActivity.class);
                 startActivity(intent);
@@ -169,6 +181,7 @@ public class Fragment_Main extends Fragment {
     }
 
     public void QUERY_NOTE() {
+        //Content provider ,Uri 를 이용해 SELECT
         int i = 0;
 
         try {
@@ -196,6 +209,7 @@ public class Fragment_Main extends Fragment {
                 String isFavorite = cursor.getString(cursor.getColumnIndex(columns[4]));
                 String which_folder = cursor.getString(cursor.getColumnIndex(columns[5]));
 
+                //배열에 담음
                 Arr_ID[i] = id;
                 Arr_TITLE[i] = title;
 
@@ -216,6 +230,7 @@ public class Fragment_Main extends Fragment {
         }
     }
 
+    //Note.java 에 DB 값 저장
     public List<Note> getList() {
         List<Note> list = new ArrayList<>();
 
@@ -230,6 +245,8 @@ public class Fragment_Main extends Fragment {
         return list;
     }
 
+    //체크박스 관련
+    //체크하고 btnPlus 누르면 값 Toast 로 뿌림
     public void selectedClick() {
 
         List list = adapter.getSelectedItem();

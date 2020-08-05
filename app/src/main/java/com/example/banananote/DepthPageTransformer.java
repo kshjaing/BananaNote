@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.viewpager.widget.ViewPager;
 
 public class DepthPageTransformer implements ViewPager.PageTransformer {
+    //ViewPager 화면 전환 애니메이션
     private static final float MIN_SCALE = 0.75f;
 
     public void transformPage(View view, float position) {

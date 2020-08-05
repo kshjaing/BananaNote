@@ -11,7 +11,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+//Content Provider 공부 필요
 public class Provider extends ContentProvider {
     private static final String AUTHORITY = "com.example.banananote";
     private static final String BASE_PATH = "Note";

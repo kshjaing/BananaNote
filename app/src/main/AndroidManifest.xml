@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <!-- 데이터베이스 허가 -->
     <permission android:name="com.example.banananote.READ_DATABASE"
         android:protectionLevel="normal"/>
     <permission android:name="com.example.banananote.WRITE_DATABASE"
@@ -20,6 +21,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".NoteShowActivity"></activity>
 
+        <!-- Content Provider -->
         <provider
             android:name=".Provider"
             android:authorities="com.example.banananote"
@@ -27,6 +29,7 @@
             android:readPermission=".Provider.READ_DATABASE"
             android:writePermission=".Provider.WRITE_DATABASE" />
 
+        <!-- 최상단 플로팅 버튼 관련 -->
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"
