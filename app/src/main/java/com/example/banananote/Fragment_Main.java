@@ -96,30 +96,11 @@ public class Fragment_Main extends Fragment {
 
         //메모추가 버튼 (스크롤 내리면 사라짐, 올릴때 보여짐)
         btnPlus = ((MainActivity)MainActivity.context_main).btnPlus;
-
-        //NestedScrollView nestedScrollView = (NestedScrollView) v.findViewById(R.id.Nested_ScrollView);
-        /*nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                if(scrollY < oldScrollY) {
-                    //Up
-                    btnPlus.setVisibility(View.VISIBLE);
-                } else if (scrollY > oldScrollY) {
-                    //Down
-                    btnPlus.setVisibility(View.INVISIBLE);
-                    scrollTop.setVisibility(View.VISIBLE);
-                }
-
-                if (scrollY == 0) {
-                    //Top
-                    scrollTop.setVisibility(View.INVISIBLE);
-                }
-            }
-        });*/
         scrollTop = ((MainActivity)MainActivity.context_main).scrollTop;
         ScrollView scrollView = v.findViewById(R.id.frag_main_scroll);
 
+        //스크롤 터치로 btnPlus 버튼 visible 변경
+        //Up 즉 손 떼면 생겨남
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -157,15 +138,8 @@ public class Fragment_Main extends Fragment {
         scrollView.setOnScrollChangeListener(new ScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                /*if(scrollY < oldScrollY) {
-                    //Up
-                    btnPlus.setVisibility(View.VISIBLE);
-                } else if (scrollY > oldScrollY) {
-                    //Down
-                    btnPlus.setVisibility(View.INVISIBLE);
-                    scrollTop.setVisibility(View.VISIBLE);
-                }*/
 
+                //위 터치이벤트에 따라 변경
                 if(scrollStop) {
                     btnPlus.setVisibility(View.VISIBLE);
                 } else {
@@ -178,11 +152,8 @@ public class Fragment_Main extends Fragment {
                     //Top
                     scrollTop.setVisibility(View.INVISIBLE);
                 }
-
-
             }
         });
-
 
         scrollTop.setOnClickListener(new View.OnClickListener() {
             @Override
