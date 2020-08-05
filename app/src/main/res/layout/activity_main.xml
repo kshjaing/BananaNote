@@ -38,53 +38,42 @@
             android:background="#00d0d0"
             android:id="@+id/contentPanel">
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                tools:context=".MainActivity">
-
-                <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/app_bar"
+                android:orientation="vertical"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/app_bar_height"
-                    android:fitsSystemWindows="true"
+                    android:layout_height="wrap_content"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
                     android:background="@color/TitleBarLightColor">
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="20dp"
+                        android:text="전체">
 
-                    <com.google.android.material.appbar.CollapsingToolbarLayout
-                        android:id="@+id/toolbar_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fitsSystemWindows="true"
-                        app:contentScrim="@color/TitleBarLightColor"
-                        app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                        app:toolbarId="@+id/toolbar">
+                    </TextView>
+                </androidx.appcompat.widget.Toolbar>
 
-                        <androidx.appcompat.widget.Toolbar
-                            android:id="@+id/toolbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            app:layout_collapseMode="pin"
-                            app:popupTheme="@style/AppTheme.PopupOverlay"
-                            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-                            android:background="@color/TitleBarLightColor"
-                            >
-
-                        </androidx.appcompat.widget.Toolbar>
-                    </com.google.android.material.appbar.CollapsingToolbarLayout>
-                </com.google.android.material.appbar.AppBarLayout>
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/pager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     android:background="@color/BodyLightColor">
 
                 </androidx.viewpager.widget.ViewPager>
+            </LinearLayout>
 
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <Button
                     android:id="@+id/scrollTop"
                     android:layout_width="wrap_content"
@@ -102,7 +91,6 @@
                     android:layout_gravity="bottom|end"
                     android:background="@drawable/button_plus"/>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
             <LinearLayout
                 android:id="@+id/Frame_Empty_LinearLayout"

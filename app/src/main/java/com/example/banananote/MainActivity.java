@@ -1,6 +1,7 @@
 package com.example.banananote;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -27,6 +28,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
@@ -52,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean is_Panel_Expanded;
 
     //private Button btn_menu; //메뉴가 보여지게 할 햄버거 버튼
+
+    //toolbar
+    Toolbar toolbar;
+    ActionBar actionBar;
+    TextView toolbar_title;
 
     //페이저
     ViewPager pager;
@@ -144,11 +151,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false); //default title
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle("ALL");
+        toolbar_title = findViewById(R.id.toolbar_title); //툴바 제목
+
+        //CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        //toolBarLayout.setTitle("ALL");
         getWindow().setStatusBarColor(Color.parseColor("#fff9eb"));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -195,11 +208,12 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         Position = position;
-                        toolBarLayout.setTitle("ALL");
+                        toolbar_title.setText("전체");
+
                         break;
                     case 1:
                         Position = position;
-                        toolBarLayout.setTitle("Folder");
+                        toolbar_title.setText("할일");
                         break;
                 }
             }
@@ -325,8 +339,8 @@ public class MainActivity extends AppCompatActivity {
                             .setDuration(300)
                             .start();
 
-                    androidx.coordinatorlayout.widget.CoordinatorLayout ViewGroup =
-                            (androidx.coordinatorlayout.widget.CoordinatorLayout) findViewById(R.id.pager).getParent();
+                    LinearLayout ViewGroup =
+                            (LinearLayout) findViewById(R.id.pager).getParent();
                     ViewGroup_Enable_Toggle(ViewGroup, false);
 
                     ((LinearLayout) findViewById(R.id.Frame_Empty_LinearLayout)).setVisibility(View.VISIBLE);
@@ -340,8 +354,8 @@ public class MainActivity extends AppCompatActivity {
                                     .start();
                             is_Panel_Expanded = false;
 
-                            androidx.coordinatorlayout.widget.CoordinatorLayout ViewGroup =
-                                    (androidx.coordinatorlayout.widget.CoordinatorLayout) findViewById(R.id.pager).getParent();
+                            LinearLayout ViewGroup =
+                                    (LinearLayout) findViewById(R.id.pager).getParent();
                             ViewGroup_Enable_Toggle(ViewGroup, true);
 
                             ((LinearLayout) findViewById(R.id.Frame_Empty_LinearLayout)).setVisibility(View.GONE);
