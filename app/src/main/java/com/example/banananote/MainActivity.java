@@ -115,7 +115,9 @@ public class MainActivity extends AppCompatActivity {
                     if (Settings.canDrawOverlays(MainActivity.this)) {
                         foregroundServiceIntent = new Intent(MainActivity.this, FloatingViewService.class);
                         startService(foregroundServiceIntent);
-                    } else {
+                    }
+
+                    else {
                         new AwesomeSuccessDialog(MainActivity.this)
                                 .setTitle("빠른 메모")
                                 .setMessage("빠른 메모를 위해 권한이 필요합니다")
