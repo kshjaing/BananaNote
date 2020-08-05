@@ -1,18 +1,18 @@
 package com.example.banananote;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -23,14 +23,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.view.View.OnClickListener; //클릭 이벤트
 import android.widget.SearchView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
@@ -46,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int MESSAGE_PERMISSION_GRANTED = 1111;
     private static final int MESSAGE_PERMISSION_DENIED = 1112;
 
-    public static SQLiteDatabase db = null;
-    public static DBHelper dbHelper;
-
     //menu 부분
     private DisplayMetrics metrics;
     private LinearLayout MenuPanel;
@@ -59,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean is_Panel_Expanded;
 
     //private Button btn_menu; //메뉴가 보여지게 할 햄버거 버튼
+
+    //toolbar
+    Toolbar toolbar;
+    ActionBar actionBar;
+    TextView toolbar_title;
 
     //페이저
     ViewPager pager;
@@ -72,9 +72,11 @@ public class MainActivity extends AppCompatActivity {
     //하단 탭
     //private TabLayout tabLayout;
 
-
-    Button btnPlus;                           //새 메모 버튼
-    ImageButton ibtnSearch;                    //검색버튼(actionbar.xml)
+    //activity_bottom_menu.xml
+    //btnPlus
+    public Button btnPlus;
+    //scrollTop
+    public Button scrollTop;
 
     //pager position value
     int Position;
@@ -82,20 +84,16 @@ public class MainActivity extends AppCompatActivity {
     ///
     public static Context context_main;
     public static Boolean Edit_Activation;
-    public static Boolean isDarkmode;         //다크모드 인수
 
-    String a;
     public static String tag;
+
+    //Memo 추가액티비티 - > 메모 보기 액티비티
+    public static int save = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ibtnSearch = findViewById(R.id.ibtnSearch);
-
-        dbHelper = new DBHelper(this, 4);
-        db = dbHelper.getWritableDatabase();
 
         //tag = "multi";
         tag = "single";
@@ -103,9 +101,6 @@ public class MainActivity extends AppCompatActivity {
         context_main = MainActivity.this;
         Edit_Activation = false; //기본값 비활성화
 
-
-        //전역 폰트로 지정할 typeface 생성
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "font/ridibatang.otf");
 
         Btn_Permission = findViewById(R.id.switch_Permission);
 
@@ -156,36 +151,81 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false); //default title
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        toolbar_title = findViewById(R.id.toolbar_title); //툴바 제목
+
+        //CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        //toolBarLayout.setTitle("ALL");
+        getWindow().setStatusBarColor(Color.parseColor("#fff9eb"));
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
+
         btnPlus = findViewById(R.id.btnPlus);
         btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), NoteAddActivity.class);
+                save = 1;
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
             }
         });
 
+        scrollTop = findViewById(R.id.scrollTop);
 
-
-        //------------------페이저 기능--------------------
+        //pager
         pager = findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(2); //페이지 크기 2개
+        pager.setOffscreenPageLimit(2);
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
-        adapter.notifyDataSetChanged();  //데이터 변화 시 바로 변경해서 보여주는 역할(새로고침)
 
-        //메인페이지
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        //폴더페이지
-        Fragment_Todo fragment_todo = new Fragment_Todo();
-        adapter.addItem(fragment_todo);
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
 
-        Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                switch (position) {
+                    case 0:
+                        Position = position;
+                        toolbar_title.setText("전체");
+
+                        break;
+                    case 1:
+                        Position = position;
+                        toolbar_title.setText("할일");
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+        Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -201,15 +241,6 @@ public class MainActivity extends AppCompatActivity {
         MenuPanelParameters.width = PanelWidth;
 
         MenuPanel.setLayoutParams(MenuPanelParameters);
-
-
-        View main_cardview;
-        main_cardview = getLayoutInflater().inflate(R.layout.frag_main_item, null,false);
-
-        CheckBox main_checkBox;
-        main_checkBox = main_cardview.findViewById(R.id.main_checkbox);
-
-        main_checkBox.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -220,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onStop();
     }
-
 
     public static void ViewGroup_Enable_Toggle(ViewGroup viewGroup, boolean Enable) {
         int ChildActivity_Count = viewGroup.getChildCount();
@@ -235,7 +265,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     public void onObtainingPermissionOverlayWindow() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
@@ -299,12 +328,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //ActionBar menu Selected
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //햄버거 버튼
+            case android.R.id.home:
                 if (!is_Panel_Expanded) {
                     is_Panel_Expanded = true;
                     MainPanel.animate()
@@ -312,8 +339,8 @@ public class MainActivity extends AppCompatActivity {
                             .setDuration(300)
                             .start();
 
-                    androidx.coordinatorlayout.widget.CoordinatorLayout ViewGroup =
-                            (androidx.coordinatorlayout.widget.CoordinatorLayout) findViewById(R.id.pager).getParent();
+                    LinearLayout ViewGroup =
+                            (LinearLayout) findViewById(R.id.pager).getParent();
                     ViewGroup_Enable_Toggle(ViewGroup, false);
 
                     ((LinearLayout) findViewById(R.id.Frame_Empty_LinearLayout)).setVisibility(View.VISIBLE);
@@ -327,8 +354,8 @@ public class MainActivity extends AppCompatActivity {
                                     .start();
                             is_Panel_Expanded = false;
 
-                            androidx.coordinatorlayout.widget.CoordinatorLayout ViewGroup =
-                                    (androidx.coordinatorlayout.widget.CoordinatorLayout) findViewById(R.id.pager).getParent();
+                            LinearLayout ViewGroup =
+                                    (LinearLayout) findViewById(R.id.pager).getParent();
                             ViewGroup_Enable_Toggle(ViewGroup, true);
 
                             ((LinearLayout) findViewById(R.id.Frame_Empty_LinearLayout)).setVisibility(View.GONE);
@@ -352,18 +379,19 @@ public class MainActivity extends AppCompatActivity {
 
     protected void restart() {
 
-
         Edit_Activation = true;
 
         //페이저 기능
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
+        adapter.notifyDataSetChanged();
 
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Todo fragment_todo = new Fragment_Todo();
-        adapter.addItem(fragment_todo);
+
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
@@ -374,29 +402,51 @@ public class MainActivity extends AppCompatActivity {
                 fragment_main.selectedClick();
             }
         });
-
     }
 
     @Override
     public void onBackPressed() {
-        Edit_Activation = false;
+        if(!Edit_Activation) {
+            super.onBackPressed();
+        } else {
+            //((MainActivity)MainActivity.context_main).restart();
+            //onRestart();
+            Edit_Activation = false;
+            onRestart();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //Toast.makeText(context_main, "test", Toast.LENGTH_SHORT).show();
         //페이저 기능
+
+        tag = "single";
+        scrollTop.setVisibility(View.GONE);
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
 
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Todo fragment_todo = new Fragment_Todo();
-        adapter.addItem(fragment_todo);
+        Fragment_Folder fragment_folder = new Fragment_Folder();
+        adapter.addItem(fragment_folder);
+
+        adapter.notifyDataSetChanged();
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
-    }
 
-    @Override
-    public void onResume() {
-
-        super.onResume();
+        btnPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), NoteAddActivity.class);
+                save = 1;
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
     }
 }

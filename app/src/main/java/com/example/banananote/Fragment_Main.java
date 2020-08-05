@@ -1,11 +1,13 @@
 package com.example.banananote;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,6 +16,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,9 +54,10 @@ public class Fragment_Main extends Fragment {
     public static String[] Arr_CONTENTS_MEMO = {};
     public static String[] Arr_isFAVORITE = {};
     public static String[] Arr_WHICH_FOLDER = {};
-
+    boolean scrollStop;
     @Nullable
     @Override
+    @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         context_Frag_Main = Fragment_Main.this;
@@ -64,8 +69,10 @@ public class Fragment_Main extends Fragment {
 
         List<Note> list = getList();
 
+
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,1);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setNestedScrollingEnabled(false);
 
         //MainActivity.tag = "multi";
 
@@ -89,19 +96,56 @@ public class Fragment_Main extends Fragment {
 
         //메모추가 버튼 (스크롤 내리면 사라짐, 올릴때 보여짐)
         btnPlus = ((MainActivity)MainActivity.context_main).btnPlus;
+        scrollTop = ((MainActivity)MainActivity.context_main).scrollTop;
+        ScrollView scrollView = v.findViewById(R.id.frag_main_scroll);
 
-        NestedScrollView nestedScrollView = (NestedScrollView) v.findViewById(R.id.Nested_ScrollView);
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        //스크롤 터치로 btnPlus 버튼 visible 변경
+        //Up 즉 손 떼면 생겨남
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_SCROLL:
+                        Log.e("MotionEvent","SCROLL");
+                    case MotionEvent.ACTION_MOVE:
+                        Log.e("MotionEvent","MOVE");
+                        scrollStop = false;
+                        break;
 
-                if(scrollY < oldScrollY) {
-                    //Up
+                    case MotionEvent.ACTION_DOWN:
+                        Log.e("MotionEvent","DOWN");
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        Log.e("MotionEvent","CANCEL");
+                    case MotionEvent.ACTION_UP:
+                        Log.e("MotionEvent","UP");
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                scrollStop = true;
+
+                                btnPlus.setVisibility(View.VISIBLE);
+                            }
+                        }, 700);
+
+                        break;
+                }
+                return false;
+            }
+        });
+
+        scrollView.setOnScrollChangeListener(new ScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                //위 터치이벤트에 따라 변경
+                if(scrollStop) {
                     btnPlus.setVisibility(View.VISIBLE);
-                } else if (scrollY > oldScrollY) {
-                    //Down
+                } else {
                     btnPlus.setVisibility(View.INVISIBLE);
                     scrollTop.setVisibility(View.VISIBLE);
+
                 }
 
                 if (scrollY == 0) {
@@ -111,15 +155,16 @@ public class Fragment_Main extends Fragment {
             }
         });
 
-        scrollTop = ((MainActivity)MainActivity.context_main).scrollTop;
         scrollTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nestedScrollView.smoothScrollTo(0,0);
-
+                //nestedScrollView.smoothScrollTo(0,0);
                 scrollTop.setVisibility(View.GONE);
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
         });
+
+
         return v;
     }
 
