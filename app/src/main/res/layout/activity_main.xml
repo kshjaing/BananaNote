@@ -55,7 +55,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:textSize="20dp"
-                        android:text="전체">
+                        android:text="전체"
+                        android:fontFamily="@font/ridibatang">
 
                     </TextView>
                 </androidx.appcompat.widget.Toolbar>
@@ -86,8 +87,10 @@
 
                 <Button
                     android:id="@+id/btnPlus"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="30dp"
                     android:layout_gravity="bottom|end"
                     android:background="@drawable/button_plus"/>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>

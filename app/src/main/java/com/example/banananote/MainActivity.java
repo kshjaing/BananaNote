@@ -190,8 +190,9 @@ public class MainActivity extends AppCompatActivity {
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Folder fragment_folder = new Fragment_Folder();
-        adapter.addItem(fragment_folder);
+        Fragment_Todo fragment_todo = new Fragment_Todo();
+        adapter.addItem(fragment_todo);
+
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
@@ -205,17 +206,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                switch (position) {
-                    case 0:
-                        Position = position;
-                        toolbar_title.setText("전체");
-
-                        break;
-                    case 1:
-                        Position = position;
-                        toolbar_title.setText("할일");
-                        break;
-                }
             }
 
             @Override
@@ -389,9 +379,9 @@ public class MainActivity extends AppCompatActivity {
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
+        Fragment_Todo fragment_todo = new Fragment_Todo();
+        adapter.addItem(fragment_todo);
 
-        Fragment_Folder fragment_folder = new Fragment_Folder();
-        adapter.addItem(fragment_folder);
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
@@ -430,8 +420,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
 
-        Fragment_Folder fragment_folder = new Fragment_Folder();
-        adapter.addItem(fragment_folder);
+        Fragment_Todo fragment_todo = new Fragment_Todo();
+        adapter.addItem(fragment_todo);
 
         adapter.notifyDataSetChanged();
 
