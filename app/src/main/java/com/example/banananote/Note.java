@@ -1,7 +1,7 @@
 package com.example.banananote;
 
 public class Note {
-    //생성자
+
     String Title;
     String CreateDate;
     String Memo;

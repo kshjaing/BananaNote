@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
     public static String tag;
 
     //Memo 추가액티비티 - > 메모 보기 액티비티
+    ///MainActivity.java 변수
+    //이 값이 1일때, NoteAddActivity.java 에서 메모 저장하면서 넘어옴.
+    //이 값이 0일때, MainActivity.java 에서 메모를 클릭하면서 들어옴.
     public static int save = 0;
 
     @Override
@@ -101,12 +104,12 @@ public class MainActivity extends AppCompatActivity {
         context_main = MainActivity.this;
         Edit_Activation = false; //기본값 비활성화
 
-
+        //최상단 플로팅관련
         Btn_Permission = findViewById(R.id.switch_Permission);
 
         if (FloatingViewService.isService) Btn_Permission.setChecked(true);
         else Btn_Permission.setChecked(false);
-
+        //허가 받기위해
         Btn_Permission.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -127,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                                 .setPositiveButtonClick(new Closure() {
                                     @Override
                                     public void exec() {
-                                        //새로운 시도
                                         if (Settings.canDrawOverlays(MainActivity.this)) {
                                             foregroundServiceIntent = new Intent(MainActivity.this, FloatingViewService.class);
                                             startService(foregroundServiceIntent);
@@ -162,8 +164,6 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar_title = findViewById(R.id.toolbar_title); //툴바 제목
 
-        //CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        //toolBarLayout.setTitle("ALL");
         getWindow().setStatusBarColor(Color.parseColor("#fff9eb"));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), NoteAddActivity.class);
-                save = 1;
+                save = 1; //맨위 설명
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
@@ -218,10 +218,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
-
+        //디스플레이 width 값
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        PanelWidth = (int) ((metrics.widthPixels) * 0.85);
+        PanelWidth = (int) ((metrics.widthPixels) * 0.85); //서브 메뉴 나올때 덮는 길이
 
         MainPanel = (LinearLayout) findViewById(R.id.MainPanel);
         MainPanelParameters = (FrameLayout.LayoutParams) MainPanel.getLayoutParams();
@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
         MenuPanel.setLayoutParams(MenuPanelParameters);
     }
 
+    //최상단 플로팅 버튼 관련
     @Override
     protected void onStop() {
         if (!Settings.canDrawOverlays(MainActivity.this)) {
@@ -244,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    //재귀호출로 토글
     public static void ViewGroup_Enable_Toggle(ViewGroup viewGroup, boolean Enable) {
         int ChildActivity_Count = viewGroup.getChildCount();
         for (int i = 0; i < ChildActivity_Count; i++) {
@@ -258,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //최상단 플로팅 허가
     public void onObtainingPermissionOverlayWindow() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
         startActivityForResult(intent, REQ_CODE_OVERLAY_PERMISSION);
@@ -288,6 +291,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //ActionBar menu inflater
+    //검색 구현
+    //디자인만
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -334,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
                     LinearLayout ViewGroup =
                             (LinearLayout) findViewById(R.id.pager).getParent();
                     ViewGroup_Enable_Toggle(ViewGroup, false);
-
+                    //home 버튼 클릭하면 투명 레이아웃으로 덮는다.
                     ((LinearLayout) findViewById(R.id.Frame_Empty_LinearLayout)).setVisibility(View.VISIBLE);
                     findViewById(R.id.Frame_Empty_LinearLayout).setEnabled(true);
                     findViewById(R.id.Frame_Empty_LinearLayout).setOnTouchListener(new View.OnTouchListener() {
@@ -369,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //체크박스 모드
     protected void restart() {
 
         Edit_Activation = true;
@@ -396,6 +402,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //상황에 따라 앱 종료
     @Override
     public void onBackPressed() {
         if(!Edit_Activation) {
@@ -408,6 +415,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //새로고침
     @Override
     protected void onRestart() {
         super.onRestart();

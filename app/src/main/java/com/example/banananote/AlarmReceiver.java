@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 
 public class AlarmReceiver extends BroadcastReceiver {
-
+    //최상단 플로팅 버튼 관련 나중에 설명
     @Override
     public void onReceive(Context context, Intent intent) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

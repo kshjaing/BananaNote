@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class NoteShowActivity extends AppCompatActivity {
+    //메모 클릭하여 들어온 화면
 
     Toolbar toolbar;
     ActionBar actionBar;
@@ -27,7 +28,9 @@ public class NoteShowActivity extends AppCompatActivity {
     TextView Note_CreateDate;
     TextView Note_Memo;
 
-    ///
+    ///MainActivity.java 변수
+    //이 값이 1일때, NoteAddActivity.java 에서 메모 저장하면서 넘어옴.
+    //이 값이 0일때, MainActivity.java 에서 메모를 클릭하면서 들어옴.
     int save;
 
     @Override
@@ -46,9 +49,6 @@ public class NoteShowActivity extends AppCompatActivity {
                 break;
             case android.R.id.home:
                 finish();
-                /*Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
                 onBackPressed();
                 break;
         }
@@ -66,7 +66,6 @@ public class NoteShowActivity extends AppCompatActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
         //toolbar.setNavigationIcon(R.drawable.button_hamburger_size);
 
         //NoteAddActivity.java - > 저장

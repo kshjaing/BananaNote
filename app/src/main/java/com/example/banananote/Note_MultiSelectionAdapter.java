@@ -19,7 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Note_MultiSelectionAdapter  extends RecyclerView.Adapter<Note_MultiSelectionAdapter.ViewHolder> {
+    //이 클래스는 잠시 사용하지 않는다.
 
+    //현재 꾹 누르면 체크박스 나오는 부분에서 뭘 누르든 맨위로 올라간다.
+    //체크 박스 선택시 그 위치 체크하고 스크롤도 그 위치에 두고 싶다.
+    //공부 더 하고 수정해본다.
     private List<Note> items;
     private Fragment fragment;
 

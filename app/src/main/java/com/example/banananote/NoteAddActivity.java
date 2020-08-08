@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 public class NoteAddActivity extends AppCompatActivity {
+    //btnPlus 버튼 클릭 시 이동
 
     Toolbar toolbar;
     ActionBar actionBar;
@@ -49,6 +50,7 @@ public class NoteAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_add);
 
+        //toolbar 관련
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
@@ -56,9 +58,10 @@ public class NoteAddActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.button_hamburger_size);
-
         //toolbar.setNavigationIcon(R.drawable.button_hamburger_size);
 
+        //메모 저장되면 NoteShowActivity 로 이동함
+        //이동할 때 가져갈 값들
         Title = findViewById(R.id.Add_Title);
         Memo = findViewById(R.id.Add_Memo);
 
@@ -95,6 +98,7 @@ public class NoteAddActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Content Provider, Uri
     //INSERT NOTE
     public void INSERT_NOTE() {
         Log.e("NoteAddActivity.java"," INSERT_NOTE() 메서드 호출");
@@ -135,6 +139,7 @@ public class NoteAddActivity extends AppCompatActivity {
         Log.e("NoteAddActivity.java","INSERT 결과 : " + uri.toString());
     }
 
+    //저장 안할때 판단
     @Override
     public void onBackPressed() {
         super.onBackPressed();
